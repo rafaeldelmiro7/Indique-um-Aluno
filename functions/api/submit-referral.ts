@@ -1,0 +1,95 @@
+import { createFirestoreDoc, type FirebaseAdminEnv } from "../lib/firebaseAdmin";
+import { EMAIL_RE, isValidCpf } from "../lib/validation";
+
+interface SubmitReferralBody {
+  ambassadorType: "pais" | "colaborador";
+  ambassadorName: string;
+  ambassadorEmail: string;
+  ambassadorPhone: string;
+  ambassadorCpf: string;
+  ambassadorBirthDate: string;
+  studentName: string;
+  studentEmail?: string;
+  studentPhone: string;
+  schoolId: string;
+  schoolName: string;
+  grade?: string;
+}
+
+function json(data: unknown, status = 200): Response {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
+export const onRequestPost: PagesFunction<FirebaseAdminEnv> = async (context) => {
+  let body: Partial<SubmitReferralBody>;
+  try {
+    body = await context.request.json();
+  } catch {
+    return json({ error: "Corpo da requisição inválido." }, 400);
+  }
+
+  const {
+    ambassadorType,
+    ambassadorName,
+    ambassadorEmail,
+    ambassadorPhone,
+    ambassadorCpf,
+    ambassadorBirthDate,
+    studentName,
+    studentEmail,
+    studentPhone,
+    schoolId,
+    schoolName,
+    grade,
+  } = body;
+
+  if (
+    (ambassadorType !== "pais" && ambassadorType !== "colaborador") ||
+    !ambassadorName?.trim() ||
+    !ambassadorPhone?.trim() ||
+    !ambassadorCpf ||
+    !ambassadorBirthDate ||
+    !studentName?.trim() ||
+    !studentPhone?.trim() ||
+    !schoolId ||
+    !schoolName
+  ) {
+    return json({ error: "Preencha todos os campos obrigatórios." }, 400);
+  }
+  if (!EMAIL_RE.test(ambassadorEmail ?? "")) {
+    return json({ error: "E-mail do embaixador inválido." }, 400);
+  }
+  if (studentEmail && !EMAIL_RE.test(studentEmail)) {
+    return json({ error: "E-mail do aluno inválido." }, 400);
+  }
+  if (!isValidCpf(ambassadorCpf)) {
+    return json({ error: "CPF inválido." }, 400);
+  }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(ambassadorBirthDate) || Number.isNaN(Date.parse(ambassadorBirthDate))) {
+    return json({ error: "Data de nascimento inválida." }, 400);
+  }
+
+  const now = Date.now();
+  const id = await createFirestoreDoc(context.env, "referrals", {
+    ambassadorType,
+    ambassadorName: ambassadorName.trim(),
+    ambassadorEmail: ambassadorEmail!.trim(),
+    ambassadorPhone: ambassadorPhone.trim(),
+    ambassadorCpf: ambassadorCpf.replace(/\D/g, ""),
+    ambassadorBirthDate,
+    studentName: studentName.trim(),
+    studentEmail: (studentEmail ?? "").trim(),
+    studentPhone: studentPhone.trim(),
+    schoolId,
+    schoolName,
+    grade: (grade ?? "").trim(),
+    status: "pendente",
+    createdAt: now,
+    updatedAt: now,
+  });
+
+  return json({ id });
+};
