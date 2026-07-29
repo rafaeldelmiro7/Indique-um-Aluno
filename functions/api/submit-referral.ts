@@ -89,6 +89,10 @@ export const onRequestPost: PagesFunction<FirebaseAdminEnv> = async (context) =>
     schoolName,
     status: "pendente",
     visitDate: "",
+    visitResult: "nao_registrada",
+    contactAttemptDate: "",
+    contactAttemptNote: "",
+    contactResult: "nao_registrado",
     createdAt: now,
     updatedAt: now,
   });

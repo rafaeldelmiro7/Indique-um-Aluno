@@ -1,16 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import ReferralEditModal from "../components/ReferralEditModal";
 import StatusBadge from "../components/StatusBadge";
 import { logout } from "../lib/auth";
-import {
-  listAllReferrals,
-  listSchools,
-  updateReferralStatus,
-  updateReferralVisitDate,
-} from "../lib/firestore";
+import { listAllReferrals, listSchools } from "../lib/firestore";
 import {
   AMBASSADOR_TYPE_LABEL,
+  CONTACT_RESULT_LABEL,
   REFERRAL_STATUS_LABEL,
+  VISIT_RESULT_LABEL,
   type AmbassadorType,
   type Referral,
   type ReferralStatus,
@@ -29,6 +27,7 @@ export default function AdminDashboard() {
   const [statusFilter, setStatusFilter] = useState<typeof ALL | ReferralStatus>(ALL);
   const [ambassadorFilter, setAmbassadorFilter] = useState(ALL);
   const [typeFilter, setTypeFilter] = useState<typeof ALL | AmbassadorType>(ALL);
+  const [editingReferral, setEditingReferral] = useState<Referral | null>(null);
 
   useEffect(() => {
     Promise.all([listAllReferrals(), listSchools()]).then(([refs, sch]) => {
@@ -55,18 +54,12 @@ export default function AdminDashboard() {
     [referrals, schoolFilter, statusFilter, ambassadorFilter, typeFilter]
   );
 
-  async function handleStatusChange(id: string, status: ReferralStatus) {
-    await updateReferralStatus(id, status);
-    setReferrals((prev) =>
-      prev.map((r) => (r.id === id ? { ...r, status } : r))
-    );
+  function handleSaved(updated: Referral) {
+    setReferrals((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
   }
 
-  async function handleVisitDateChange(id: string, visitDate: string) {
-    await updateReferralVisitDate(id, visitDate);
-    setReferrals((prev) =>
-      prev.map((r) => (r.id === id ? { ...r, visitDate } : r))
-    );
+  function handleDeleted(id: string) {
+    setReferrals((prev) => prev.filter((r) => r.id !== id));
   }
 
   function handleExportCsv() {
@@ -83,7 +76,11 @@ export default function AdminDashboard() {
       "CPF do Parceiro/Embaixador",
       "Data de Nascimento do Parceiro/Embaixador",
       "Status",
+      "Data do Contato",
+      "Resultado do Contato",
+      "Observação do Contato",
       "Data da Visita",
+      "Resultado da Visita",
       "Data",
     ];
     const rows = filtered.map((r) => [
@@ -99,7 +96,11 @@ export default function AdminDashboard() {
       r.ambassadorCpf,
       r.ambassadorBirthDate,
       REFERRAL_STATUS_LABEL[r.status],
+      r.contactAttemptDate,
+      CONTACT_RESULT_LABEL[r.contactResult],
+      r.contactAttemptNote,
       r.visitDate,
+      VISIT_RESULT_LABEL[r.visitResult],
       new Date(r.createdAt).toLocaleDateString("pt-BR"),
     ]);
     const csv = [header, ...rows]
@@ -218,7 +219,8 @@ export default function AdminDashboard() {
               <th className="px-4 py-3 font-medium">Parceiro</th>
               <th className="px-4 py-3 font-medium">Contato Parceiro/Embaixador</th>
               <th className="px-4 py-3 font-medium">Status</th>
-              <th className="px-4 py-3 font-medium">Agendamento de Visita</th>
+              <th className="px-4 py-3 font-medium">Contato / Visita</th>
+              <th className="px-4 py-3 font-medium"></th>
             </tr>
           </thead>
           <tbody>
@@ -250,36 +252,35 @@ export default function AdminDashboard() {
                   </div>
                 </td>
                 <td className="px-4 py-3">
-                  <select
-                    value={r.status}
-                    onChange={(e) =>
-                      handleStatusChange(r.id, e.target.value as ReferralStatus)
-                    }
-                    className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs"
-                  >
-                    {Object.entries(REFERRAL_STATUS_LABEL).map(([value, label]) => (
-                      <option key={value} value={value}>
-                        {label}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="mt-1">
-                    <StatusBadge status={r.status} />
-                  </div>
+                  <StatusBadge status={r.status} />
+                </td>
+                <td className="px-4 py-3 text-xs text-slate-500">
+                  <div>Contato: {CONTACT_RESULT_LABEL[r.contactResult]}</div>
+                  <div>Visita: {VISIT_RESULT_LABEL[r.visitResult]}</div>
                 </td>
                 <td className="px-4 py-3">
-                  <input
-                    type="date"
-                    value={r.visitDate ?? ""}
-                    onChange={(e) => handleVisitDateChange(r.id, e.target.value)}
-                    className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs"
-                  />
+                  <button
+                    onClick={() => setEditingReferral(r)}
+                    className="rounded-full border border-slate-300 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                  >
+                    Abrir
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      {editingReferral && (
+        <ReferralEditModal
+          referral={editingReferral}
+          schools={schools}
+          onClose={() => setEditingReferral(null)}
+          onSaved={handleSaved}
+          onDeleted={handleDeleted}
+        />
+      )}
     </div>
   );
 }

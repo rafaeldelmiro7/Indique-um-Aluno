@@ -27,7 +27,7 @@ service cloud.firestore {
       // (Admin SDK/REST), que ignora estas regras. Client nunca escreve direto.
       allow create: if false;
       allow update: if isAdmin();
-      allow delete: if false;
+      allow delete: if isAdmin();
     }
   }
 }

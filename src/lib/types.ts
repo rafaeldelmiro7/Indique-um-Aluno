@@ -12,6 +12,22 @@ export type ReferralStatus =
   | "nao_tem_interesse"
   | "nao_elegivel";
 
+export type VisitResult = "nao_registrada" | "realizada" | "tentativa_sem_sucesso";
+
+export const VISIT_RESULT_LABEL: Record<VisitResult, string> = {
+  nao_registrada: "Não registrada",
+  realizada: "Visita realizada",
+  tentativa_sem_sucesso: "Tentativa sem sucesso",
+};
+
+export type ContactResult = "nao_registrado" | "realizado" | "tentativa_sem_sucesso";
+
+export const CONTACT_RESULT_LABEL: Record<ContactResult, string> = {
+  nao_registrado: "Não registrado",
+  realizado: "Contato realizado",
+  tentativa_sem_sucesso: "Tentativa sem sucesso",
+};
+
 export interface School {
   id: string;
   name: string;
@@ -35,6 +51,10 @@ export interface Referral {
   schoolName: string;
   status: ReferralStatus;
   visitDate: string;
+  visitResult: VisitResult;
+  contactAttemptDate: string;
+  contactAttemptNote: string;
+  contactResult: ContactResult;
   createdAt: number;
   updatedAt: number;
 }
