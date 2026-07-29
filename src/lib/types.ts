@@ -9,6 +9,7 @@ export type ReferralStatus =
   | "pendente"
   | "agendada_visita"
   | "matriculado"
+  | "nao_tem_interesse"
   | "nao_elegivel";
 
 export interface School {
@@ -33,6 +34,7 @@ export interface Referral {
   schoolId: string;
   schoolName: string;
   status: ReferralStatus;
+  visitDate: string;
   createdAt: number;
   updatedAt: number;
 }
@@ -41,6 +43,7 @@ export const REFERRAL_STATUS_LABEL: Record<ReferralStatus, string> = {
   pendente: "Pendente",
   agendada_visita: "Agendada Visita",
   matriculado: "Matriculado",
+  nao_tem_interesse: "Não tem Interesse",
   nao_elegivel: "Não elegível",
 };
 

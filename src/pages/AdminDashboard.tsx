@@ -1,9 +1,21 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import StatusBadge from "../components/StatusBadge";
 import { logout } from "../lib/auth";
-import { listAllReferrals, listSchools, updateReferralStatus } from "../lib/firestore";
-import { AMBASSADOR_TYPE_LABEL, REFERRAL_STATUS_LABEL, type Referral, type ReferralStatus, type School } from "../lib/types";
+import {
+  listAllReferrals,
+  listSchools,
+  updateReferralStatus,
+  updateReferralVisitDate,
+} from "../lib/firestore";
+import {
+  AMBASSADOR_TYPE_LABEL,
+  REFERRAL_STATUS_LABEL,
+  type AmbassadorType,
+  type Referral,
+  type ReferralStatus,
+  type School,
+} from "../lib/types";
 
 const ALL = "todos";
 
@@ -16,6 +28,7 @@ export default function AdminDashboard() {
   const [schoolFilter, setSchoolFilter] = useState(ALL);
   const [statusFilter, setStatusFilter] = useState<typeof ALL | ReferralStatus>(ALL);
   const [ambassadorFilter, setAmbassadorFilter] = useState(ALL);
+  const [typeFilter, setTypeFilter] = useState<typeof ALL | AmbassadorType>(ALL);
 
   useEffect(() => {
     Promise.all([listAllReferrals(), listSchools()]).then(([refs, sch]) => {
@@ -36,15 +49,23 @@ export default function AdminDashboard() {
         (r) =>
           (schoolFilter === ALL || r.schoolId === schoolFilter) &&
           (statusFilter === ALL || r.status === statusFilter) &&
-          (ambassadorFilter === ALL || r.ambassadorName === ambassadorFilter)
+          (ambassadorFilter === ALL || r.ambassadorName === ambassadorFilter) &&
+          (typeFilter === ALL || r.ambassadorType === typeFilter)
       ),
-    [referrals, schoolFilter, statusFilter, ambassadorFilter]
+    [referrals, schoolFilter, statusFilter, ambassadorFilter, typeFilter]
   );
 
   async function handleStatusChange(id: string, status: ReferralStatus) {
     await updateReferralStatus(id, status);
     setReferrals((prev) =>
       prev.map((r) => (r.id === id ? { ...r, status } : r))
+    );
+  }
+
+  async function handleVisitDateChange(id: string, visitDate: string) {
+    await updateReferralVisitDate(id, visitDate);
+    setReferrals((prev) =>
+      prev.map((r) => (r.id === id ? { ...r, visitDate } : r))
     );
   }
 
@@ -55,13 +76,14 @@ export default function AdminDashboard() {
       "Telefone do aluno",
       "E-mail do aluno",
       "Escola",
-      "Embaixador",
+      "Parceiro",
       "Tipo",
-      "Telefone do embaixador",
-      "E-mail do embaixador",
-      "CPF do embaixador",
-      "Data de Nascimento do embaixador",
+      "Telefone do Parceiro/Embaixador",
+      "E-mail do Parceiro/Embaixador",
+      "CPF do Parceiro/Embaixador",
+      "Data de Nascimento do Parceiro/Embaixador",
       "Status",
+      "Data da Visita",
       "Data",
     ];
     const rows = filtered.map((r) => [
@@ -77,6 +99,7 @@ export default function AdminDashboard() {
       r.ambassadorCpf,
       r.ambassadorBirthDate,
       REFERRAL_STATUS_LABEL[r.status],
+      r.visitDate,
       new Date(r.createdAt).toLocaleDateString("pt-BR"),
     ]);
     const csv = [header, ...rows]
@@ -105,18 +128,26 @@ export default function AdminDashboard() {
         <h1 className="text-2xl font-bold text-slate-900">
           Indicações da rede
         </h1>
-        <button
-          onClick={async () => {
-            await logout();
-            navigate("/");
-          }}
-          className="text-sm font-semibold text-slate-500 hover:text-slate-800"
-        >
-          Sair
-        </button>
+        <div className="flex items-center gap-4">
+          <Link
+            to="/"
+            className="text-sm font-semibold text-slate-500 hover:text-slate-800"
+          >
+            Voltar Página Inicial
+          </Link>
+          <button
+            onClick={async () => {
+              await logout();
+              navigate("/");
+            }}
+            className="text-sm font-semibold text-slate-500 hover:text-slate-800"
+          >
+            Sair
+          </button>
+        </div>
       </div>
 
-      <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-4">
+      <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-5">
         <select
           value={schoolFilter}
           onChange={(e) => setSchoolFilter(e.target.value)}
@@ -144,11 +175,21 @@ export default function AdminDashboard() {
         </select>
 
         <select
+          value={typeFilter}
+          onChange={(e) => setTypeFilter(e.target.value as typeof ALL | AmbassadorType)}
+          className="input"
+        >
+          <option value={ALL}>Parceiro e Colaborador</option>
+          <option value="pais">Parceiro</option>
+          <option value="colaborador">Colaborador</option>
+        </select>
+
+        <select
           value={ambassadorFilter}
           onChange={(e) => setAmbassadorFilter(e.target.value)}
           className="input"
         >
-          <option value={ALL}>Todos os embaixadores</option>
+          <option value={ALL}>Todos os parceiros</option>
           {ambassadors.map((name) => (
             <option key={name} value={name}>
               {name}
@@ -169,14 +210,15 @@ export default function AdminDashboard() {
       </p>
 
       <div className="mt-3 overflow-x-auto rounded-xl border border-slate-100">
-        <table className="w-full min-w-[920px] text-left text-sm">
+        <table className="w-full min-w-[1080px] text-left text-sm">
           <thead className="bg-slate-50 text-slate-500">
             <tr>
               <th className="px-4 py-3 font-medium">Aluno indicado</th>
               <th className="px-4 py-3 font-medium">Escola</th>
-              <th className="px-4 py-3 font-medium">Embaixador</th>
-              <th className="px-4 py-3 font-medium">Contato do embaixador</th>
+              <th className="px-4 py-3 font-medium">Parceiro</th>
+              <th className="px-4 py-3 font-medium">Contato Parceiro/Embaixador</th>
               <th className="px-4 py-3 font-medium">Status</th>
+              <th className="px-4 py-3 font-medium">Agendamento de Visita</th>
             </tr>
           </thead>
           <tbody>
@@ -224,6 +266,14 @@ export default function AdminDashboard() {
                   <div className="mt-1">
                     <StatusBadge status={r.status} />
                   </div>
+                </td>
+                <td className="px-4 py-3">
+                  <input
+                    type="date"
+                    value={r.visitDate ?? ""}
+                    onChange={(e) => handleVisitDateChange(r.id, e.target.value)}
+                    className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs"
+                  />
                 </td>
               </tr>
             ))}

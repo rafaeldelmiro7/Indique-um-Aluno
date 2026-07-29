@@ -37,3 +37,13 @@ export async function updateReferralStatus(
     updatedAt: Date.now(),
   });
 }
+
+export async function updateReferralVisitDate(
+  id: string,
+  visitDate: string
+): Promise<void> {
+  await updateDoc(doc(db, "referrals", id), {
+    visitDate,
+    updatedAt: Date.now(),
+  });
+}

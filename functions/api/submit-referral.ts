@@ -88,6 +88,7 @@ export const onRequestPost: PagesFunction<FirebaseAdminEnv> = async (context) =>
     schoolId,
     schoolName,
     status: "pendente",
+    visitDate: "",
     createdAt: now,
     updatedAt: now,
   });
