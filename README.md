@@ -19,10 +19,19 @@ o CPF usado no cadastro.
 1. Crie um projeto em https://console.firebase.google.com.
 2. **Authentication** → Sign-in method → ative **E-mail/senha**.
 3. **Firestore Database** → criar banco (modo produção).
-4. Publique as regras deste repositório: copie o conteúdo de
-   [`firestore.rules`](firestore.rules) no console (Firestore → Regras) ou via
-   Firebase CLI: `firebase deploy --only firestorerules` (requer
-   `firebase init` apontando para este projeto).
+4. Publique as regras deste repositório. Três formas:
+   - **Script** (requer `serviceAccountKey.json`, veja passo 8):
+     ```bash
+     npm run deploy:rules
+     ```
+   - **Manual**: copie o conteúdo de [`firestore.rules`](firestore.rules) no
+     console (Firestore → Regras → Publicar).
+   - **Firebase CLI**: `firebase deploy --only firestore:rules` (requer
+     `firebase init` apontando para este projeto).
+
+   Sempre que `firestore.rules` mudar, republique com `npm run deploy:rules`
+   (ou uma das outras formas) — o arquivo no repositório não se aplica
+   sozinho ao banco.
 5. Cadastre as unidades da rede na coleção `schools` (campos: `name`, `slug`,
    `active: true`). Sem isso o formulário de indicação não tem unidade para
    escolher. Duas formas de fazer isso:
@@ -119,8 +128,9 @@ functions/
   lib/firebaseAdmin.ts     JWT + REST API do Firestore (sem SDK Admin/Node)
   lib/validation.ts        validação de CPF/e-mail no servidor
 scripts/
-  seed-schools.mjs         popula a coleção schools
-  check-admin-setup.mjs    lista usuários do Auth e status de admin
-  gen-dev-vars.mjs         gera .dev.vars a partir do serviceAccountKey.json
+  seed-schools.mjs             popula a coleção schools
+  check-admin-setup.mjs        lista usuários do Auth e status de admin
+  publish-firestore-rules.mjs  publica firestore.rules via Firebase Rules API
+  gen-dev-vars.mjs             gera .dev.vars a partir do serviceAccountKey.json
 firestore.rules
 ```

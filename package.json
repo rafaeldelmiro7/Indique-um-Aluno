@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "lint": "tsc -b --noEmit",
     "seed:schools": "node scripts/seed-schools.mjs",
+    "deploy:rules": "node scripts/publish-firestore-rules.mjs",
     "gen:dev-vars": "node scripts/gen-dev-vars.mjs",
     "preview:pages": "npm run build && wrangler pages dev dist --port 8788"
   },
