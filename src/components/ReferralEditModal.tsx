@@ -134,7 +134,7 @@ export default function ReferralEditModal({
 
           <section>
             <h3 className="text-sm font-bold uppercase tracking-wide text-brand-700">
-              Parceiro/Embaixador
+              Parceiro
             </h3>
             <div className="mt-3 grid gap-4 sm:grid-cols-2">
               <Field label="Nome completo">

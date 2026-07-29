@@ -1,7 +1,7 @@
 # Indique um Aluno
 
 Landing + sistema de indicação de alunos para uma rede de escolas. Fluxo:
-site público → formulário único (dados do embaixador + dados do aluno
+site público → formulário único (dados do parceiro + dados do aluno
 indicado) → painel do admin da rede com todas as indicações. Quem indicou
 também pode consultar o status da própria indicação em `/status`, informando
 o CPF usado no cadastro.
@@ -60,9 +60,6 @@ o CPF usado no cadastro.
      serviço; mantenha os `\n` literais — o código já converte para quebras de
      linha reais)
 
-Para testar as Functions localmente com `wrangler pages dev`, crie um arquivo
-`.dev.vars` (não versionado) com essas três chaves.
-
 ## Desenvolvimento local
 
 ```bash
@@ -70,6 +67,26 @@ npm install
 cp .env.example .env.local   # preencha com as chaves do seu projeto Firebase
 npm run dev
 ```
+
+Isso roda só o Vite — bom para mexer na interface, mas **as rotas `/api/*`
+(Cloudflare Functions) não existem** nesse modo, então formulário de
+indicação e consulta de status vão dar erro ao enviar.
+
+### Testar as Functions localmente (envio de indicação, consulta de status)
+
+Precisa do `serviceAccountKey.json` (mesmo arquivo usado no `seed:schools`,
+veja acima) na raiz do projeto. Depois:
+
+```bash
+npm run gen:dev-vars   # gera o .dev.vars a partir do serviceAccountKey.json
+npm run preview:pages  # builda e sobe com wrangler pages dev (porta 8788)
+```
+
+O `.dev.vars` não é versionado. Se precisar recriar (ex.: trocou de conta de
+serviço), rode `npm run gen:dev-vars` de novo — o script já escapa a chave
+privada corretamente numa linha só (`\n` literal), que é o formato que o
+`wrangler` espera; colar a chave manualmente com quebras de linha reais
+quebra o parser e dá erro `Invalid PKCS8 input`.
 
 ## Segurança
 
@@ -101,5 +118,9 @@ functions/
   api/check-status.ts      Cloudflare Pages Function pública (consulta por CPF)
   lib/firebaseAdmin.ts     JWT + REST API do Firestore (sem SDK Admin/Node)
   lib/validation.ts        validação de CPF/e-mail no servidor
+scripts/
+  seed-schools.mjs         popula a coleção schools
+  check-admin-setup.mjs    lista usuários do Auth e status de admin
+  gen-dev-vars.mjs         gera .dev.vars a partir do serviceAccountKey.json
 firestore.rules
 ```

@@ -71,10 +71,10 @@ export default function AdminDashboard() {
       "Escola",
       "Parceiro",
       "Tipo",
-      "Telefone do Parceiro/Embaixador",
-      "E-mail do Parceiro/Embaixador",
-      "CPF do Parceiro/Embaixador",
-      "Data de Nascimento do Parceiro/Embaixador",
+      "Telefone do Parceiro",
+      "E-mail do Parceiro",
+      "CPF do Parceiro",
+      "Data de Nascimento do Parceiro",
       "Status",
       "Data do Contato",
       "Resultado do Contato",
@@ -217,7 +217,7 @@ export default function AdminDashboard() {
               <th className="px-4 py-3 font-medium">Aluno indicado</th>
               <th className="px-4 py-3 font-medium">Escola</th>
               <th className="px-4 py-3 font-medium">Parceiro</th>
-              <th className="px-4 py-3 font-medium">Contato Parceiro/Embaixador</th>
+              <th className="px-4 py-3 font-medium">Contato Parceiro</th>
               <th className="px-4 py-3 font-medium">Status</th>
               <th className="px-4 py-3 font-medium">Contato / Visita</th>
               <th className="px-4 py-3 font-medium"></th>

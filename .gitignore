@@ -6,3 +6,4 @@ dist
 *.local
 serviceAccountKey.json
 *.tsbuildinfo
+.dev.vars

@@ -61,7 +61,7 @@ export const onRequestPost: PagesFunction<FirebaseAdminEnv> = async (context) =>
     return json({ error: "Preencha todos os campos obrigatórios." }, 400);
   }
   if (!EMAIL_RE.test(ambassadorEmail ?? "")) {
-    return json({ error: "E-mail do embaixador inválido." }, 400);
+    return json({ error: "E-mail do Parceiro inválido." }, 400);
   }
   if (studentEmail && !EMAIL_RE.test(studentEmail)) {
     return json({ error: "E-mail do aluno inválido." }, 400);

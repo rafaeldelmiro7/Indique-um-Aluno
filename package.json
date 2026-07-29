@@ -8,7 +8,9 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "tsc -b --noEmit",
-    "seed:schools": "node scripts/seed-schools.mjs"
+    "seed:schools": "node scripts/seed-schools.mjs",
+    "gen:dev-vars": "node scripts/gen-dev-vars.mjs",
+    "preview:pages": "npm run build && wrangler pages dev dist --port 8788"
   },
   "dependencies": {
     "firebase": "^11.4.0",
@@ -26,6 +28,7 @@
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.2",
-    "vite": "^6.0.7"
+    "vite": "^6.0.7",
+    "wrangler": "^3.99.0"
   }
 }
