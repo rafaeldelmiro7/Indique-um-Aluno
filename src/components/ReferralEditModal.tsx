@@ -33,9 +33,16 @@ export default function ReferralEditModal({
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sectionSaving, setSectionSaving] = useState<"contact" | "visit" | null>(null);
+  const [sectionSaved, setSectionSaved] = useState<"contact" | "visit" | null>(null);
 
   function update<K extends keyof Referral>(key: K, value: Referral[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function errorMessage(err: unknown, fallback: string): string {
+    if (err instanceof Error) return `${fallback} (${err.message})`;
+    return fallback;
   }
 
   async function handleSave() {
@@ -47,10 +54,33 @@ export default function ReferralEditModal({
       await updateReferral(referral.id, data);
       onSaved({ ...data, id: referral.id });
       onClose();
-    } catch {
-      setError("Não foi possível salvar as alterações.");
+    } catch (err) {
+      setError(errorMessage(err, "Não foi possível salvar as alterações."));
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handleSaveSection(section: "contact" | "visit") {
+    setSectionSaving(section);
+    setSectionSaved(null);
+    setError(null);
+    try {
+      const fields =
+        section === "contact"
+          ? {
+              contactAttemptDate: form.contactAttemptDate,
+              contactAttemptNote: form.contactAttemptNote,
+              contactResult: form.contactResult,
+            }
+          : { visitDate: form.visitDate, visitResult: form.visitResult };
+      await updateReferral(referral.id, fields);
+      onSaved({ ...referral, ...fields });
+      setSectionSaved(section);
+    } catch (err) {
+      setError(errorMessage(err, "Não foi possível salvar essa seção."));
+    } finally {
+      setSectionSaving(null);
     }
   }
 
@@ -62,8 +92,8 @@ export default function ReferralEditModal({
       await deleteReferral(referral.id);
       onDeleted(referral.id);
       onClose();
-    } catch {
-      setError("Não foi possível excluir a indicação.");
+    } catch (err) {
+      setError(errorMessage(err, "Não foi possível excluir a indicação."));
       setDeleting(false);
     }
   }
@@ -211,9 +241,24 @@ export default function ReferralEditModal({
           </section>
 
           <section>
-            <h3 className="text-sm font-bold uppercase tracking-wide text-brand-700">
-              Tentativa de contato
-            </h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-bold uppercase tracking-wide text-brand-700">
+                Tentativa de contato
+              </h3>
+              <div className="flex items-center gap-2">
+                {sectionSaved === "contact" && (
+                  <span className="text-xs font-semibold text-emerald-600">Salvo!</span>
+                )}
+                <button
+                  type="button"
+                  onClick={() => handleSaveSection("contact")}
+                  disabled={sectionSaving === "contact"}
+                  className="rounded-full border border-brand-300 px-3 py-1 text-xs font-semibold text-brand-700 hover:bg-brand-50 disabled:opacity-50"
+                >
+                  {sectionSaving === "contact" ? "Salvando..." : "Salvar contato"}
+                </button>
+              </div>
+            </div>
             <div className="mt-3 grid gap-4 sm:grid-cols-2">
               <Field label="Data do contato">
                 <input
@@ -248,9 +293,24 @@ export default function ReferralEditModal({
           </section>
 
           <section>
-            <h3 className="text-sm font-bold uppercase tracking-wide text-brand-700">
-              Visita ou tentativa de visita
-            </h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-bold uppercase tracking-wide text-brand-700">
+                Visita ou tentativa de visita
+              </h3>
+              <div className="flex items-center gap-2">
+                {sectionSaved === "visit" && (
+                  <span className="text-xs font-semibold text-emerald-600">Salvo!</span>
+                )}
+                <button
+                  type="button"
+                  onClick={() => handleSaveSection("visit")}
+                  disabled={sectionSaving === "visit"}
+                  className="rounded-full border border-brand-300 px-3 py-1 text-xs font-semibold text-brand-700 hover:bg-brand-50 disabled:opacity-50"
+                >
+                  {sectionSaving === "visit" ? "Salvando..." : "Salvar visita"}
+                </button>
+              </div>
+            </div>
             <div className="mt-3 grid gap-4 sm:grid-cols-2">
               <Field label="Data da visita">
                 <input

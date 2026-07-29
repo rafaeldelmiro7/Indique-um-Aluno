@@ -12,10 +12,15 @@ export type ReferralStatus =
   | "nao_tem_interesse"
   | "nao_elegivel";
 
-export type VisitResult = "nao_registrada" | "realizada" | "tentativa_sem_sucesso";
+export type VisitResult =
+  | "nao_registrada"
+  | "agendada"
+  | "realizada"
+  | "tentativa_sem_sucesso";
 
 export const VISIT_RESULT_LABEL: Record<VisitResult, string> = {
   nao_registrada: "Não registrada",
+  agendada: "Visita agendada",
   realizada: "Visita realizada",
   tentativa_sem_sucesso: "Tentativa sem sucesso",
 };
