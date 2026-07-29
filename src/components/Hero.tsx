@@ -7,7 +7,7 @@ const COPY: Record<
 > = {
   pais: {
     title: "Indique e Ganhe com a nossa Rede de Ensino!",
-    body: "Valorizamos a confiança de cada família que acredita em nossa proposta pedagógica. Indique novos alunos para qualquer uma das nossas escolas e, após a matrícula efetivada, você concorre a prêmios exclusivos.",
+    body: "Valorizamos a confiança de cada família que acredita em nossa proposta pedagógica. Indique novos alunos para qualquer uma das nossas escolas e, após a matrícula efetivada, você recebe seu prêmio exclusivo.",
   },
   colaborador: {
     title: "Indique e Ganhe como Colaborador!",

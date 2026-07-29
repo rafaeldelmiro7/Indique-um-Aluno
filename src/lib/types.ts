@@ -26,12 +26,12 @@ export interface Referral {
   ambassadorPhone: string;
   ambassadorCpf: string;
   ambassadorBirthDate: string;
+  studentResponsibleName: string;
   studentName: string;
   studentEmail: string;
   studentPhone: string;
   schoolId: string;
   schoolName: string;
-  grade: string;
   status: ReferralStatus;
   createdAt: number;
   updatedAt: number;
@@ -44,20 +44,3 @@ export const REFERRAL_STATUS_LABEL: Record<ReferralStatus, string> = {
   nao_elegivel: "Não elegível",
 };
 
-export const GRADE_OPTIONS = [
-  "Maternal",
-  "Pré I",
-  "Pré II",
-  "1º Ano EFUND",
-  "2º Ano EFUND",
-  "3º Ano EFUND",
-  "4º Ano EFUND",
-  "5º Ano EFUND",
-  "6º Ano EFUND",
-  "7º Ano EFUND",
-  "8º Ano EFUND",
-  "9º Ano EFUND",
-  "1º Ano EM",
-  "2º Ano EM",
-  "3º Ano EM",
-];

@@ -31,7 +31,6 @@ export const onRequestPost: PagesFunction<FirebaseAdminEnv> = async (context) =>
     .map((d) => ({
       studentName: d.studentName,
       schoolName: d.schoolName,
-      grade: d.grade,
       status: d.status,
       createdAt: Number(d.createdAt),
     }))

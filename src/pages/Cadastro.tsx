@@ -4,7 +4,7 @@ import DoodleBackground from "../components/DoodleBackground";
 import Field from "../components/Field";
 import { formatCpf, isValidCpf } from "../lib/cpf";
 import { listSchools } from "../lib/firestore";
-import { AMBASSADOR_TYPE_LABEL, GRADE_OPTIONS, type School } from "../lib/types";
+import { AMBASSADOR_TYPE_LABEL, type School } from "../lib/types";
 
 export default function Cadastro() {
   const [searchParams] = useSearchParams();
@@ -22,11 +22,11 @@ export default function Cadastro() {
   const [ambassadorCpf, setAmbassadorCpf] = useState("");
   const [ambassadorBirthDate, setAmbassadorBirthDate] = useState("");
 
+  const [studentResponsibleName, setStudentResponsibleName] = useState("");
   const [studentName, setStudentName] = useState("");
   const [studentEmail, setStudentEmail] = useState("");
   const [studentPhone, setStudentPhone] = useState("");
   const [schoolId, setSchoolId] = useState("");
-  const [grade, setGrade] = useState("");
 
   useEffect(() => {
     listSchools()
@@ -64,12 +64,12 @@ export default function Cadastro() {
           ambassadorPhone,
           ambassadorCpf,
           ambassadorBirthDate,
+          studentResponsibleName,
           studentName,
           studentEmail,
           studentPhone,
           schoolId: school.id,
           schoolName: school.name,
-          grade,
         }),
       });
       if (!res.ok) {
@@ -108,7 +108,7 @@ export default function Cadastro() {
       <h1 className="text-2xl font-bold text-slate-900">Indique um aluno</h1>
       <p className="mt-2 text-sm text-slate-600">
         Preencha seus dados e os dados de quem você está indicando. Após a
-        matrícula efetivada, você concorre a prêmios.
+        matrícula efetivada, você recebe seu prêmio.
       </p>
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-8">
@@ -175,6 +175,37 @@ export default function Cadastro() {
             Indicado
           </h2>
           <div className="mt-3 grid gap-4 sm:grid-cols-2">
+            <Field label="Unidade escolar pretendida">
+              {loadingSchools ? (
+                <p className="text-sm text-slate-500">Carregando unidades...</p>
+              ) : schools.length === 0 ? (
+                <p className="text-sm text-amber-600">
+                  Nenhuma unidade cadastrada ainda. Peça ao administrador para
+                  cadastrar as escolas da rede.
+                </p>
+              ) : (
+                <select
+                  required
+                  value={schoolId}
+                  onChange={(e) => setSchoolId(e.target.value)}
+                  className="input"
+                >
+                  {schools.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.name}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </Field>
+            <Field label="Nome do responsável">
+              <input
+                required
+                value={studentResponsibleName}
+                onChange={(e) => setStudentResponsibleName(e.target.value)}
+                className="input"
+              />
+            </Field>
             <Field label="Nome do aluno">
               <input
                 required
@@ -198,43 +229,6 @@ export default function Cadastro() {
                 onChange={(e) => setStudentPhone(e.target.value)}
                 className="input"
               />
-            </Field>
-            <Field label="Série pretendida">
-              <select
-                value={grade}
-                onChange={(e) => setGrade(e.target.value)}
-                className="input"
-              >
-                <option value="">Selecione</option>
-                {GRADE_OPTIONS.map((g) => (
-                  <option key={g} value={g}>
-                    {g}
-                  </option>
-                ))}
-              </select>
-            </Field>
-            <Field label="Unidade escolar pretendida">
-              {loadingSchools ? (
-                <p className="text-sm text-slate-500">Carregando unidades...</p>
-              ) : schools.length === 0 ? (
-                <p className="text-sm text-amber-600">
-                  Nenhuma unidade cadastrada ainda. Peça ao administrador para
-                  cadastrar as escolas da rede.
-                </p>
-              ) : (
-                <select
-                  required
-                  value={schoolId}
-                  onChange={(e) => setSchoolId(e.target.value)}
-                  className="input"
-                >
-                  {schools.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.name}
-                    </option>
-                  ))}
-                </select>
-              )}
             </Field>
           </div>
         </section>

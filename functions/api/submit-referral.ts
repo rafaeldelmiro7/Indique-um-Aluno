@@ -8,12 +8,12 @@ interface SubmitReferralBody {
   ambassadorPhone: string;
   ambassadorCpf: string;
   ambassadorBirthDate: string;
+  studentResponsibleName: string;
   studentName: string;
   studentEmail?: string;
   studentPhone: string;
   schoolId: string;
   schoolName: string;
-  grade?: string;
 }
 
 function json(data: unknown, status = 200): Response {
@@ -38,12 +38,12 @@ export const onRequestPost: PagesFunction<FirebaseAdminEnv> = async (context) =>
     ambassadorPhone,
     ambassadorCpf,
     ambassadorBirthDate,
+    studentResponsibleName,
     studentName,
     studentEmail,
     studentPhone,
     schoolId,
     schoolName,
-    grade,
   } = body;
 
   if (
@@ -52,6 +52,7 @@ export const onRequestPost: PagesFunction<FirebaseAdminEnv> = async (context) =>
     !ambassadorPhone?.trim() ||
     !ambassadorCpf ||
     !ambassadorBirthDate ||
+    !studentResponsibleName?.trim() ||
     !studentName?.trim() ||
     !studentPhone?.trim() ||
     !schoolId ||
@@ -80,12 +81,12 @@ export const onRequestPost: PagesFunction<FirebaseAdminEnv> = async (context) =>
     ambassadorPhone: ambassadorPhone.trim(),
     ambassadorCpf: ambassadorCpf.replace(/\D/g, ""),
     ambassadorBirthDate,
+    studentResponsibleName: studentResponsibleName.trim(),
     studentName: studentName.trim(),
     studentEmail: (studentEmail ?? "").trim(),
     studentPhone: studentPhone.trim(),
     schoolId,
     schoolName,
-    grade: (grade ?? "").trim(),
     status: "pendente",
     createdAt: now,
     updatedAt: now,

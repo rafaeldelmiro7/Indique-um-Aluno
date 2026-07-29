@@ -8,7 +8,6 @@ import type { ReferralStatus } from "../lib/types";
 interface StatusResult {
   studentName: string;
   schoolName: string;
-  grade: string;
   status: ReferralStatus;
   createdAt: number;
 }
@@ -92,10 +91,7 @@ export default function Status() {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="font-semibold text-slate-900">{r.studentName}</p>
-                  <p className="text-xs text-slate-500">
-                    {r.schoolName}
-                    {r.grade ? ` · ${r.grade}` : ""}
-                  </p>
+                  <p className="text-xs text-slate-500">{r.schoolName}</p>
                 </div>
                 <StatusBadge status={r.status} />
               </div>

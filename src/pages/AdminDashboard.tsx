@@ -51,7 +51,7 @@ export default function AdminDashboard() {
   function handleExportCsv() {
     const header = [
       "Aluno",
-      "Série",
+      "Responsável do aluno",
       "Telefone do aluno",
       "E-mail do aluno",
       "Escola",
@@ -66,7 +66,7 @@ export default function AdminDashboard() {
     ];
     const rows = filtered.map((r) => [
       r.studentName,
-      r.grade,
+      r.studentResponsibleName,
       r.studentPhone,
       r.studentEmail,
       r.schoolName,
@@ -173,7 +173,7 @@ export default function AdminDashboard() {
           <thead className="bg-slate-50 text-slate-500">
             <tr>
               <th className="px-4 py-3 font-medium">Aluno indicado</th>
-              <th className="px-4 py-3 font-medium">Escola / Série</th>
+              <th className="px-4 py-3 font-medium">Escola</th>
               <th className="px-4 py-3 font-medium">Embaixador</th>
               <th className="px-4 py-3 font-medium">Contato do embaixador</th>
               <th className="px-4 py-3 font-medium">Status</th>
@@ -184,15 +184,15 @@ export default function AdminDashboard() {
               <tr key={r.id} className="border-t border-slate-100">
                 <td className="px-4 py-3">
                   <div>{r.studentName}</div>
+                  <div className="text-xs text-slate-400">
+                    Responsável: {r.studentResponsibleName}
+                  </div>
                   <div className="text-xs text-slate-400">{r.studentPhone}</div>
                   {r.studentEmail && (
                     <div className="text-xs text-slate-400">{r.studentEmail}</div>
                   )}
                 </td>
-                <td className="px-4 py-3">
-                  <div>{r.schoolName}</div>
-                  <div className="text-xs text-slate-400">{r.grade}</div>
-                </td>
+                <td className="px-4 py-3">{r.schoolName}</td>
                 <td className="px-4 py-3">
                   <div>{r.ambassadorName}</div>
                   <div className="text-xs text-slate-400">
