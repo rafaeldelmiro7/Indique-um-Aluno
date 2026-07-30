@@ -101,15 +101,7 @@ export const onRequestPost: PagesFunction<FirebaseAdminEnv> = async (context) =>
     return json({ id });
   } catch (err) {
     return json(
-      {
-        error: `Erro ao gravar no Firestore: ${err instanceof Error ? err.message : String(err)}`,
-        debugEnvKeys: Object.keys(context.env),
-        debugPrivateKeyType: typeof context.env.FIREBASE_PRIVATE_KEY,
-        debugPrivateKeyLength:
-          typeof context.env.FIREBASE_PRIVATE_KEY === "string"
-            ? context.env.FIREBASE_PRIVATE_KEY.length
-            : null,
-      },
+      { error: `Erro ao gravar no Firestore: ${err instanceof Error ? err.message : String(err)}` },
       500
     );
   }
