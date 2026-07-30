@@ -94,6 +94,8 @@ export const onRequestPost: PagesFunction<FirebaseAdminEnv> = async (context) =>
       contactAttemptDate: "",
       contactAttemptNote: "",
       contactResult: "nao_registrado",
+      contactHistory: [],
+      visitHistory: [],
       createdAt: now,
       updatedAt: now,
     });

@@ -33,6 +33,19 @@ export const CONTACT_RESULT_LABEL: Record<ContactResult, string> = {
   tentativa_sem_sucesso: "Tentativa sem sucesso",
 };
 
+export interface ContactAttemptEntry {
+  date: string;
+  result: ContactResult;
+  note: string;
+  createdAt: number;
+}
+
+export interface VisitAttemptEntry {
+  date: string;
+  result: VisitResult;
+  createdAt: number;
+}
+
 export interface School {
   id: string;
   name: string;
@@ -60,6 +73,8 @@ export interface Referral {
   contactAttemptDate: string;
   contactAttemptNote: string;
   contactResult: ContactResult;
+  contactHistory: ContactAttemptEntry[];
+  visitHistory: VisitAttemptEntry[];
   createdAt: number;
   updatedAt: number;
 }

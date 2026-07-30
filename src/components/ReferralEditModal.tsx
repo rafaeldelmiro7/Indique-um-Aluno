@@ -7,12 +7,20 @@ import {
   REFERRAL_STATUS_LABEL,
   VISIT_RESULT_LABEL,
   type AmbassadorType,
+  type ContactAttemptEntry,
   type ContactResult,
   type Referral,
   type ReferralStatus,
   type School,
+  type VisitAttemptEntry,
   type VisitResult,
 } from "../lib/types";
+
+function formatDate(value: string): string {
+  if (!value) return "—";
+  const [year, month, day] = value.split("-");
+  return year && month && day ? `${day}/${month}/${year}` : value;
+}
 
 interface ReferralEditModalProps {
   referral: Referral;
@@ -66,15 +74,34 @@ export default function ReferralEditModal({
     setSectionSaved(null);
     setError(null);
     try {
-      const fields =
-        section === "contact"
-          ? {
-              contactAttemptDate: form.contactAttemptDate,
-              contactAttemptNote: form.contactAttemptNote,
-              contactResult: form.contactResult,
-            }
-          : { visitDate: form.visitDate, visitResult: form.visitResult };
+      let fields: Partial<Referral>;
+      if (section === "contact") {
+        const entry: ContactAttemptEntry = {
+          date: form.contactAttemptDate,
+          result: form.contactResult,
+          note: form.contactAttemptNote,
+          createdAt: Date.now(),
+        };
+        fields = {
+          contactAttemptDate: form.contactAttemptDate,
+          contactAttemptNote: form.contactAttemptNote,
+          contactResult: form.contactResult,
+          contactHistory: [...(form.contactHistory ?? []), entry],
+        };
+      } else {
+        const entry: VisitAttemptEntry = {
+          date: form.visitDate,
+          result: form.visitResult,
+          createdAt: Date.now(),
+        };
+        fields = {
+          visitDate: form.visitDate,
+          visitResult: form.visitResult,
+          visitHistory: [...(form.visitHistory ?? []), entry],
+        };
+      }
       await updateReferral(referral.id, fields);
+      setForm((prev) => ({ ...prev, ...fields }));
       onSaved({ ...referral, ...fields });
       setSectionSaved(section);
     } catch (err) {
@@ -290,6 +317,31 @@ export default function ReferralEditModal({
                 />
               </Field>
             </div>
+
+            {form.contactHistory && form.contactHistory.length > 0 && (
+              <div className="mt-4 space-y-2 border-t border-slate-100 pt-3">
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                  Histórico de contatos
+                </p>
+                <ul className="space-y-2">
+                  {[...form.contactHistory].reverse().map((entry, i) => (
+                    <li key={i} className="rounded-lg bg-slate-50 px-3 py-2 text-sm">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-medium text-slate-700">
+                          {formatDate(entry.date)}
+                        </span>
+                        <span className="text-xs font-semibold text-brand-700">
+                          {CONTACT_RESULT_LABEL[entry.result]}
+                        </span>
+                      </div>
+                      {entry.note && (
+                        <p className="mt-1 text-slate-600">{entry.note}</p>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </section>
 
           <section>
@@ -334,6 +386,29 @@ export default function ReferralEditModal({
                 </select>
               </Field>
             </div>
+
+            {form.visitHistory && form.visitHistory.length > 0 && (
+              <div className="mt-4 space-y-2 border-t border-slate-100 pt-3">
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                  Histórico de visitas
+                </p>
+                <ul className="space-y-2">
+                  {[...form.visitHistory].reverse().map((entry, i) => (
+                    <li
+                      key={i}
+                      className="flex items-center justify-between gap-2 rounded-lg bg-slate-50 px-3 py-2 text-sm"
+                    >
+                      <span className="font-medium text-slate-700">
+                        {formatDate(entry.date)}
+                      </span>
+                      <span className="text-xs font-semibold text-brand-700">
+                        {VISIT_RESULT_LABEL[entry.result]}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </section>
 
           {error && <p className="text-sm text-red-600">{error}</p>}

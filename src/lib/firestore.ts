@@ -42,6 +42,8 @@ const REFERRAL_DEFAULTS: Omit<Referral, "id"> = {
   contactAttemptDate: "",
   contactAttemptNote: "",
   contactResult: "nao_registrado",
+  contactHistory: [],
+  visitHistory: [],
   createdAt: 0,
   updatedAt: 0,
 };
