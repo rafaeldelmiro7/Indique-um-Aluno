@@ -25,16 +25,23 @@ export const onRequestPost: PagesFunction<FirebaseAdminEnv> = async (context) =>
     return json({ error: "CPF inválido." }, 400);
   }
 
-  const docs = await queryByField(context.env, "referrals", "ambassadorCpf", cpf.replace(/\D/g, ""));
+  try {
+    const docs = await queryByField(context.env, "referrals", "ambassadorCpf", cpf.replace(/\D/g, ""));
 
-  const referrals = docs
-    .map((d) => ({
-      studentName: d.studentName,
-      schoolName: d.schoolName,
-      status: d.status,
-      createdAt: Number(d.createdAt),
-    }))
-    .sort((a, b) => b.createdAt - a.createdAt);
+    const referrals = docs
+      .map((d) => ({
+        studentName: d.studentName,
+        schoolName: d.schoolName,
+        status: d.status,
+        createdAt: Number(d.createdAt),
+      }))
+      .sort((a, b) => b.createdAt - a.createdAt);
 
-  return json({ referrals });
+    return json({ referrals });
+  } catch (err) {
+    return json(
+      { error: `Erro ao consultar o Firestore: ${err instanceof Error ? err.message : String(err)}` },
+      500
+    );
+  }
 };

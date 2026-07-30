@@ -73,29 +73,36 @@ export const onRequestPost: PagesFunction<FirebaseAdminEnv> = async (context) =>
     return json({ error: "Data de nascimento inválida." }, 400);
   }
 
-  const now = Date.now();
-  const id = await createFirestoreDoc(context.env, "referrals", {
-    ambassadorType,
-    ambassadorName: ambassadorName.trim(),
-    ambassadorEmail: ambassadorEmail!.trim(),
-    ambassadorPhone: ambassadorPhone.trim(),
-    ambassadorCpf: ambassadorCpf.replace(/\D/g, ""),
-    ambassadorBirthDate,
-    studentResponsibleName: studentResponsibleName.trim(),
-    studentName: studentName.trim(),
-    studentEmail: (studentEmail ?? "").trim(),
-    studentPhone: studentPhone.trim(),
-    schoolId,
-    schoolName,
-    status: "pendente",
-    visitDate: "",
-    visitResult: "nao_registrada",
-    contactAttemptDate: "",
-    contactAttemptNote: "",
-    contactResult: "nao_registrado",
-    createdAt: now,
-    updatedAt: now,
-  });
+  try {
+    const now = Date.now();
+    const id = await createFirestoreDoc(context.env, "referrals", {
+      ambassadorType,
+      ambassadorName: ambassadorName.trim(),
+      ambassadorEmail: ambassadorEmail!.trim(),
+      ambassadorPhone: ambassadorPhone.trim(),
+      ambassadorCpf: ambassadorCpf.replace(/\D/g, ""),
+      ambassadorBirthDate,
+      studentResponsibleName: studentResponsibleName.trim(),
+      studentName: studentName.trim(),
+      studentEmail: (studentEmail ?? "").trim(),
+      studentPhone: studentPhone.trim(),
+      schoolId,
+      schoolName,
+      status: "pendente",
+      visitDate: "",
+      visitResult: "nao_registrada",
+      contactAttemptDate: "",
+      contactAttemptNote: "",
+      contactResult: "nao_registrado",
+      createdAt: now,
+      updatedAt: now,
+    });
 
-  return json({ id });
+    return json({ id });
+  } catch (err) {
+    return json(
+      { error: `Erro ao gravar no Firestore: ${err instanceof Error ? err.message : String(err)}` },
+      500
+    );
+  }
 };
