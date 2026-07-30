@@ -1,5 +1,9 @@
 import { useState, type FormEvent } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import Field from "../components/Field";
+import Logo from "../components/Logo";
+import PageBackground from "../components/PageBackground";
+import { LockIcon, MailIcon, ShieldIcon } from "../components/icons";
 import { loginWithEmail } from "../lib/auth";
 
 export default function AdminLogin() {
@@ -25,44 +29,87 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-4">
-      <h1 className="text-2xl font-bold text-slate-900">Acesso administrativo</h1>
-      <p className="mt-2 text-sm text-slate-600">
-        Painel de relatórios da rede — acesso restrito.
-      </p>
+    <PageBackground>
+      <header className="border-b border-slate-200/70 bg-white/80 backdrop-blur-md">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
+          <Logo />
+          <Link
+            to="/"
+            className="text-sm font-semibold text-ink-muted transition hover:text-ink"
+          >
+            Voltar
+          </Link>
+        </div>
+      </header>
 
-      {searchParams.get("unauthorized") && (
-        <p className="mt-4 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">
-          Essa conta não tem permissão de administrador.
-        </p>
-      )}
+      <main className="mx-auto flex max-w-md flex-col justify-center px-4 py-16 sm:px-6 sm:py-24">
+        <div className="animate-fade-up text-center">
+          <span className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-slate-100 text-ink">
+            <ShieldIcon className="h-7 w-7" />
+          </span>
+          <h1 className="mt-6 text-3xl font-extrabold tracking-tight text-ink">
+            Acesso administrativo
+          </h1>
+          <p className="mt-3 text-base text-ink-soft">
+            Painel de relatórios da rede — acesso restrito.
+          </p>
+        </div>
 
-      <form onSubmit={handleSubmit} className="mt-8 space-y-4">
-        <input
-          required
-          type="email"
-          placeholder="E-mail"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="input"
-        />
-        <input
-          required
-          type="password"
-          placeholder="Senha"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="input"
-        />
-        {error && <p className="text-sm text-red-600">{error}</p>}
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full rounded-full bg-slate-900 px-6 py-3 font-semibold text-white transition hover:bg-slate-800 disabled:opacity-50"
+        {searchParams.get("unauthorized") && (
+          <p
+            role="alert"
+            className="animate-fade-up mt-8 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800"
+          >
+            Essa conta não tem permissão de administrador.
+          </p>
+        )}
+
+        <form
+          onSubmit={handleSubmit}
+          className="card animate-fade-up delay-1 mt-8 space-y-5 p-6 sm:p-7"
         >
-          {submitting ? "Entrando..." : "Entrar"}
-        </button>
-      </form>
-    </div>
+          <Field label="E-mail" icon={MailIcon}>
+            <input
+              required
+              type="email"
+              autoComplete="email"
+              placeholder="seu@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="input"
+            />
+          </Field>
+
+          <Field label="Senha" icon={LockIcon}>
+            <input
+              required
+              type="password"
+              autoComplete="current-password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="input"
+            />
+          </Field>
+
+          {error && (
+            <p
+              role="alert"
+              className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700"
+            >
+              {error}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={submitting}
+            className="inline-flex w-full items-center justify-center rounded-full bg-ink px-7 py-3.5 text-base font-semibold text-white transition hover:-translate-y-0.5 hover:bg-ink-soft disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
+          >
+            {submitting ? "Entrando…" : "Entrar"}
+          </button>
+        </form>
+      </main>
+    </PageBackground>
   );
 }

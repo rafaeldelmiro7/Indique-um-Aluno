@@ -1,7 +1,10 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import Field from "../components/Field";
+import Logo from "../components/Logo";
+import PageBackground from "../components/PageBackground";
 import StatusBadge from "../components/StatusBadge";
+import { IdIcon, SchoolIcon, SearchIcon } from "../components/icons";
 import { formatCpf, isValidCpf } from "../lib/cpf";
 import type { ReferralStatus } from "../lib/types";
 
@@ -49,62 +52,100 @@ export default function Status() {
   }
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-lg flex-col justify-center px-4 py-12">
-      <h1 className="text-2xl font-bold text-slate-900">Conferir status</h1>
-      <p className="mt-2 text-sm text-slate-600">
-        Digite o CPF usado no cadastro da indicação para ver o status.
-      </p>
-
-      <form onSubmit={handleSubmit} className="mt-8 space-y-4">
-        <Field label="CPF">
-          <input
-            required
-            inputMode="numeric"
-            placeholder="000.000.000-00"
-            value={cpf}
-            onChange={(e) => setCpf(formatCpf(e.target.value))}
-            className="input"
-          />
-        </Field>
-
-        {error && <p className="text-sm text-red-600">{error}</p>}
-
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full rounded-full bg-brand-600 px-6 py-3 font-semibold text-white transition hover:bg-brand-700 disabled:opacity-50"
-        >
-          {submitting ? "Consultando..." : "Consultar"}
-        </button>
-      </form>
-
-      {results && results.length === 0 && (
-        <p className="mt-8 text-center text-sm text-slate-500">
-          Nenhuma indicação encontrada para esse CPF.
-        </p>
-      )}
-
-      {results && results.length > 0 && (
-        <div className="mt-8 space-y-3">
-          {results.map((r, i) => (
-            <div key={i} className="rounded-xl border border-slate-100 p-4">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="font-semibold text-slate-900">{r.studentName}</p>
-                  <p className="text-xs text-slate-500">{r.schoolName}</p>
-                </div>
-                <StatusBadge status={r.status} />
-              </div>
-            </div>
-          ))}
+    <PageBackground>
+      <header className="border-b border-slate-200/70 bg-white/80 backdrop-blur-md">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
+          <Logo />
+          <Link
+            to="/"
+            className="text-sm font-semibold text-ink-muted transition hover:text-ink"
+          >
+            Voltar
+          </Link>
         </div>
-      )}
+      </header>
 
-      <p className="mt-8 text-center text-sm text-slate-600">
-        <Link to="/" className="font-semibold text-brand-700">
-          Voltar para a página inicial
-        </Link>
-      </p>
-    </div>
+      <main className="mx-auto max-w-xl px-4 py-14 sm:px-6 sm:py-20">
+        <div className="animate-fade-up text-center">
+          <span className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-brand-50 text-brand-600">
+            <SearchIcon className="h-7 w-7" />
+          </span>
+          <h1 className="mt-6 text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
+            Consultar status
+          </h1>
+          <p className="mt-3 text-lg leading-relaxed text-ink-soft">
+            Informe o CPF usado na indicação para ver o andamento de cada aluno
+            que você indicou.
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="card animate-fade-up delay-1 mt-9 space-y-5 p-6 sm:p-7">
+          <Field label="CPF" icon={IdIcon}>
+            <input
+              required
+              inputMode="numeric"
+              placeholder="000.000.000-00"
+              value={cpf}
+              onChange={(e) => setCpf(formatCpf(e.target.value))}
+              className="input"
+            />
+          </Field>
+
+          {error && (
+            <p
+              role="alert"
+              className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700"
+            >
+              {error}
+            </p>
+          )}
+
+          <button type="submit" disabled={submitting} className="btn-primary w-full">
+            {submitting ? "Consultando…" : "Consultar minhas indicações"}
+          </button>
+        </form>
+
+        {results && results.length === 0 && (
+          <div className="card mt-8 p-8 text-center">
+            <p className="font-semibold text-ink">
+              Nenhuma indicação encontrada
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-ink-soft">
+              Não localizamos indicações para esse CPF. Confira os números ou
+              faça a sua primeira indicação.
+            </p>
+            <Link to="/cadastro" className="btn-primary mt-6">
+              Fazer uma indicação
+            </Link>
+          </div>
+        )}
+
+        {results && results.length > 0 && (
+          <section className="mt-9">
+            <h2 className="text-sm font-bold uppercase tracking-wider text-ink-muted">
+              {results.length}{" "}
+              {results.length === 1 ? "indicação" : "indicações"}
+            </h2>
+
+            <ul className="mt-4 space-y-3">
+              {results.map((r, i) => (
+                <li key={i} className="card p-5">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="font-semibold text-ink">{r.studentName}</p>
+                      <p className="mt-1 flex items-center gap-1.5 text-sm text-ink-muted">
+                        <SchoolIcon className="h-4 w-4 shrink-0" />
+                        {r.schoolName}
+                      </p>
+                    </div>
+                    <StatusBadge status={r.status} />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </main>
+    </PageBackground>
   );
 }

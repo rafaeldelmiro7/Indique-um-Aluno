@@ -1,22 +1,28 @@
 import { useState } from "react";
-import AboutSection from "../components/AboutSection";
-import DoodleBackground from "../components/DoodleBackground";
+import BenefitsSection from "../components/BenefitsSection";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Hero from "../components/Hero";
+import PageBackground from "../components/PageBackground";
+import RewardSection from "../components/RewardSection";
 import StepsSection from "../components/StepsSection";
+import TrustBar from "../components/TrustBar";
 import type { AmbassadorType } from "../lib/types";
 
 export default function Landing() {
   const [audience, setAudience] = useState<AmbassadorType>("pais");
 
   return (
-    <DoodleBackground>
+    <PageBackground>
       <Header audience={audience} onAudienceChange={setAudience} />
-      <Hero audience={audience} />
-      <StepsSection />
-      <AboutSection />
+      <main>
+        <Hero audience={audience} />
+        <BenefitsSection />
+        <StepsSection />
+        <RewardSection audience={audience} />
+        <TrustBar />
+      </main>
       <Footer />
-    </DoodleBackground>
+    </PageBackground>
   );
 }
