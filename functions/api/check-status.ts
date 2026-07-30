@@ -33,6 +33,7 @@ export const onRequestPost: PagesFunction<FirebaseAdminEnv> = async (context) =>
         studentName: d.studentName,
         schoolName: d.schoolName,
         status: d.status,
+        ambassadorType: d.ambassadorType,
         createdAt: Number(d.createdAt),
       }))
       .sort((a, b) => b.createdAt - a.createdAt);

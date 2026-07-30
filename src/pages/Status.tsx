@@ -4,16 +4,25 @@ import Field from "../components/Field";
 import Logo from "../components/Logo";
 import PageBackground from "../components/PageBackground";
 import StatusBadge from "../components/StatusBadge";
-import { IdIcon, SchoolIcon, SearchIcon } from "../components/icons";
+import { GiftIcon, IdIcon, SchoolIcon, SearchIcon } from "../components/icons";
+import { AUDIENCE_COPY } from "../lib/campaign";
 import { formatCpf, isValidCpf } from "../lib/cpf";
-import type { ReferralStatus } from "../lib/types";
+import type { AmbassadorType, ReferralStatus } from "../lib/types";
 
 interface StatusResult {
   studentName: string;
   schoolName: string;
   status: ReferralStatus;
+  ambassadorType: AmbassadorType;
   createdAt: number;
 }
+
+// Etapa do acompanhamento até a matrícula ser confirmada.
+const PROGRESS_STAGE: Partial<Record<ReferralStatus, number>> = {
+  pendente: 1,
+  agendada_visita: 2,
+  matriculado: 3,
+};
 
 export default function Status() {
   const [cpf, setCpf] = useState("");
@@ -128,20 +137,48 @@ export default function Status() {
             </h2>
 
             <ul className="mt-4 space-y-3">
-              {results.map((r, i) => (
-                <li key={i} className="card p-5">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="font-semibold text-ink">{r.studentName}</p>
-                      <p className="mt-1 flex items-center gap-1.5 text-sm text-ink-muted">
-                        <SchoolIcon className="h-4 w-4 shrink-0" />
-                        {r.schoolName}
-                      </p>
+              {results.map((r, i) => {
+                const stage = PROGRESS_STAGE[r.status];
+                return (
+                  <li key={i} className="card p-5">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <p className="font-semibold text-ink">{r.studentName}</p>
+                        <p className="mt-1 flex items-center gap-1.5 text-sm text-ink-muted">
+                          <SchoolIcon className="h-4 w-4 shrink-0" />
+                          {r.schoolName}
+                        </p>
+                      </div>
+                      <StatusBadge status={r.status} />
                     </div>
-                    <StatusBadge status={r.status} />
-                  </div>
-                </li>
-              ))}
+
+                    {r.status === "matriculado" && (
+                      <div className="mt-4 flex items-center justify-between rounded-lg bg-brand-50 px-3.5 py-3">
+                        <span className="flex items-center gap-2 text-xs font-medium text-brand-900">
+                          <GiftIcon className="h-4 w-4" />
+                          Seu prêmio
+                        </span>
+                        <span className="text-lg font-extrabold tracking-tight text-brand-700">
+                          {AUDIENCE_COPY[r.ambassadorType].rewardAmount}
+                        </span>
+                      </div>
+                    )}
+
+                    {stage !== undefined && r.status !== "matriculado" && (
+                      <div className="mt-4 flex items-center gap-1.5">
+                        {[1, 2, 3].map((step) => (
+                          <span
+                            key={step}
+                            className={`h-1.5 flex-1 rounded-full ${
+                              step <= stage ? "bg-brand-600" : "bg-slate-200"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </section>
         )}

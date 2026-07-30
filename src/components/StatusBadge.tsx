@@ -1,3 +1,4 @@
+import { CheckCircleIcon } from "./icons";
 import { REFERRAL_STATUS_LABEL, type ReferralStatus } from "../lib/types";
 
 const STYLES: Record<ReferralStatus, string> = {
@@ -11,8 +12,9 @@ const STYLES: Record<ReferralStatus, string> = {
 export default function StatusBadge({ status }: { status: ReferralStatus }) {
   return (
     <span
-      className={`inline-block whitespace-nowrap rounded-full px-3 py-1 text-xs font-semibold ring-1 ring-inset ${STYLES[status]}`}
+      className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-3 py-1 text-xs font-semibold ring-1 ring-inset ${STYLES[status]}`}
     >
+      {status === "matriculado" && <CheckCircleIcon className="h-3.5 w-3.5" />}
       {REFERRAL_STATUS_LABEL[status]}
     </span>
   );
