@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --build-id: "2026-07-30.1";
+  }
+
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
