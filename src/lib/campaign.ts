@@ -24,7 +24,7 @@ export const AUDIENCE_COPY: Record<
   }
 > = {
   pais: {
-    badge: "Programa de incentivo · Rede Adventista ASuR",
+    badge: "Programa de incentivo · Rede Adventista de Educação",
     title: "Indique novos alunos e receba seu prêmio",
     subtitle:
       "Você indica uma família para uma das nossas unidades e, depois que a matrícula é efetivada, recebe R$ 500,00. O aluno indicado também ganha um kit de uniforme.",

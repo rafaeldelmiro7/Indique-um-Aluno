@@ -9,8 +9,8 @@ export default function Footer() {
           <div className="max-w-xs">
             <Logo />
             <p className="mt-4 text-sm leading-relaxed text-ink-muted">
-              Programa de incentivo à indicação de novos alunos da Rede de
-              Colégios Adventistas ASuR.
+              Programa de incentivo à indicação de novos alunos da Rede
+              Adventista de Educação.
             </p>
           </div>
 
@@ -67,7 +67,7 @@ export default function Footer() {
 
         <div className="mt-10 border-t border-slate-200/70 pt-6">
           <p className="text-xs text-ink-muted">
-            © {new Date().getFullYear()} Rede de Colégios Adventistas ASuR.
+            © {new Date().getFullYear()} Rede Adventista de Educação.
             Todos os direitos reservados.
           </p>
         </div>

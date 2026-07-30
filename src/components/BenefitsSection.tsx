@@ -27,7 +27,7 @@ const BENEFITS: Benefit[] = [
   {
     icon: SchoolIcon,
     title: "Cinco unidades",
-    body: "Indique para qualquer uma das cinco escolas da Rede Adventista ASuR em Rondônia.",
+    body: "Indique para qualquer uma das cinco escolas da Rede Adventista de Educação em Rondônia.",
   },
 ];
 

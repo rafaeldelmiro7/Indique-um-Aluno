@@ -66,7 +66,7 @@ export default function Regulamento() {
           </h1>
 
           <p className="mt-5 text-lg leading-relaxed text-ink-soft">
-            Ao indicar novos alunos à Rede de Colégios Adventistas ASUR, todo
+            Ao indicar novos alunos à Rede Adventista de Educação, todo
             mundo ganha, por indicação que se converter em matrícula (vide regras
             do programa). O programa terá vigência a partir do dia 01/08/2026, e
             será válida por meio das matrículas confirmadas até o dia 30/08/2026.
@@ -167,7 +167,7 @@ export default function Regulamento() {
             number="6"
             title="Disposições gerais"
             items={[
-              "O objetivo deste programa é incentivar a indicação de novos alunos para a Rede de Colégios Adventistas ASUR, garantindo a qualidade e o compromisso com os princípios da Rede Adventista.",
+              "O objetivo deste programa é incentivar a indicação de novos alunos para a Rede Adventista de Educação, garantindo a qualidade e o compromisso com os princípios da Rede Adventista.",
               "Qualquer dúvida ou necessidade de esclarecimento adicional deve ser direcionada à administração da unidade escolar.",
             ]}
           />
