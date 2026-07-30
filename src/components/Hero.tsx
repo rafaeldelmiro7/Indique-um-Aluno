@@ -22,7 +22,11 @@ export default function Hero({ audience }: { audience: AmbassadorType }) {
           </h1>
 
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-ink-soft sm:text-[22px] sm:leading-relaxed">
-            {copy.subtitle}
+            {copy.subtitleBefore}
+            <strong className="font-bold italic underline">
+              {copy.rewardAmount}
+            </strong>
+            {copy.subtitleAfter}
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">

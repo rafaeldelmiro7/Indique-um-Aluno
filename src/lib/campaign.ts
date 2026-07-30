@@ -17,7 +17,8 @@ export const AUDIENCE_COPY: Record<
   {
     badge: string;
     title: string;
-    subtitle: string;
+    subtitleBefore: string;
+    subtitleAfter: string;
     rewardLabel: string;
     rewardAmount: string;
     highlights: string[];
@@ -26,8 +27,9 @@ export const AUDIENCE_COPY: Record<
   pais: {
     badge: "Programa de incentivo · Rede Adventista de Educação",
     title: "Indique novos alunos e receba seu prêmio",
-    subtitle:
-      "Você indica uma família para uma das nossas unidades e, depois que a matrícula é efetivada, recebe R$ 500,00. O aluno indicado também ganha um kit de uniforme.",
+    subtitleBefore:
+      "Você indica uma família para uma das nossas unidades e, depois que a matrícula é efetivada, recebe ",
+    subtitleAfter: ". O aluno indicado também ganha um kit de uniforme.",
     rewardLabel: "Você recebe por aluno matriculado",
     rewardAmount: "R$ 500,00",
     highlights: [
@@ -40,8 +42,9 @@ export const AUDIENCE_COPY: Record<
   colaborador: {
     badge: "Programa de incentivo · Exclusivo para colaboradores",
     title: "Indique novos alunos e receba seu prêmio",
-    subtitle:
-      "Você conhece o nosso trabalho de dentro. Indique famílias para a rede e, depois que a matrícula é efetivada, receba R$ 400,00. O aluno indicado também ganha um kit de uniforme.",
+    subtitleBefore:
+      "Você conhece o nosso trabalho de dentro. Indique famílias para a rede e, depois que a matrícula é efetivada, receba ",
+    subtitleAfter: ". O aluno indicado também ganha um kit de uniforme.",
     rewardLabel: "Você recebe por aluno matriculado",
     rewardAmount: "R$ 400,00",
     highlights: [
