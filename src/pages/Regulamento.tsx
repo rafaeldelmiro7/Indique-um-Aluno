@@ -85,32 +85,14 @@ export default function Regulamento() {
               <>
                 Cadastrar a indicação no site:{" "}
                 <a
-                  href="https://indicaeadv.com.br/ama-pais/"
+                  href="https://indiqueeadv.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={LINK_CLASS}
                 >
-                  https://indicaeadv.com.br/ama-pais/
+                  https://indiqueeadv.com
                 </a>
-                , (
-                <a
-                  href="https://indicaeadv.com.br/ama-funcionarios/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={LINK_CLASS}
-                >
-                  https://indicaeadv.com.br/ama-funcionários/
-                </a>
-                ), ou parceiros (
-                <a
-                  href="https://indicaeadv.com.br/ama-parceiros/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={LINK_CLASS}
-                >
-                  https://indicaeadv.com.br/ama-parceiros/
-                </a>
-                ).
+                .
               </>,
               "Serão válidas apenas as indicações informadas no ato da matrícula pelo responsável indicado.",
               "O aluno novo indicado e efetivado não pode ser irmão de aluno veterano.",
