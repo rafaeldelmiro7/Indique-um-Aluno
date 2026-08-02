@@ -25,7 +25,7 @@ export default function StepsSection() {
   return (
     <section
       id="como-funciona"
-      className="border-y border-slate-200/70 bg-white py-16 sm:py-20"
+      className="border-y border-slate-200/70 py-16 sm:py-20"
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">

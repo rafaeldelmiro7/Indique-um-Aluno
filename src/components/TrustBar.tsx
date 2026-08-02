@@ -13,7 +13,7 @@ const ITEMS: {
 
 export default function TrustBar() {
   return (
-    <section className="border-t border-slate-200/70 bg-white py-10">
+    <section className="border-t border-slate-200/70 py-10">
       <ul className="mx-auto grid max-w-6xl gap-6 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4">
         {ITEMS.map(({ icon: Icon, label }) => (
           <li key={label} className="flex items-center gap-3">
