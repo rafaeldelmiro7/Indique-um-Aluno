@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import fundoCampanha from "../assets/fundo-campanha-amarelo.png";
 import { ArrowRightIcon, CalendarIcon, DocumentIcon, ShirtIcon } from "./icons";
 import { AUDIENCE_COPY, CAMPAIGN } from "../lib/campaign";
 import type { AmbassadorType } from "../lib/types";
@@ -12,7 +13,14 @@ export default function RewardSection({
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-      <div className="relative overflow-hidden rounded-3xl bg-brand-900 px-6 py-12 sm:px-12 sm:py-16">
+      {/* O fundo da campanha entra como textura decorativa, sob uma camada
+          azul-marinho que preserva o contraste dos textos e botões. */}
+      <div
+        className="relative overflow-hidden rounded-3xl bg-brand-900 bg-cover bg-no-repeat bg-[position:64%_center] px-5 py-11 sm:bg-center sm:px-12 sm:py-16"
+        style={{
+          backgroundImage: `linear-gradient(135deg, rgba(30, 58, 138, 0.94), rgba(23, 37, 84, 0.87)), url(${fundoCampanha})`,
+        }}
+      >
         {/* Halos decorativos */}
         <div
           className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-brand-600/40 blur-3xl"

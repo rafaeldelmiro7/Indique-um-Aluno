@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import HeroVisual from "./HeroVisual";
+import promoMatriculas from "../assets/matriculas-abertas-2027.png";
 import { ArrowRightIcon, CheckIcon, SearchIcon } from "./icons";
 import { AUDIENCE_COPY } from "../lib/campaign";
 import type { AmbassadorType } from "../lib/types";
@@ -55,8 +55,15 @@ export default function Hero({ audience }: { audience: AmbassadorType }) {
         </div>
 
         {/* Coluna visual */}
-        <div className="animate-fade-up delay-2">
-          <HeroVisual rewardAmount={copy.rewardAmount} />
+        <div className="animate-fade-up delay-2 flex justify-center lg:justify-end">
+          <img
+            src={promoMatriculas}
+            alt="Matrículas abertas 2027 da Educação Adventista"
+            width={941}
+            height={1672}
+            decoding="async"
+            className="h-auto w-full max-w-[340px] rounded-3xl object-contain shadow-card ring-1 ring-slate-200/70 sm:max-w-[400px] lg:max-w-[440px] xl:max-w-[480px]"
+          />
         </div>
       </div>
     </section>
