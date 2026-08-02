@@ -96,7 +96,7 @@ export default function Regulamento() {
               </>,
               "Serão válidas apenas as indicações informadas no ato da matrícula pelo responsável indicado.",
               "O aluno novo indicado e efetivado não pode ser irmão de aluno veterano.",
-              "O aluno novo indicado e efetivado não pode receber desconto superior a 15%.",
+              "O aluno novo indicado e efetivado não pode receber desconto superior a 10%.",
               "O aluno novo indicado e efetivado não pode ser filho de funcionário na Rede Adventista ou Associação.",
               "O aluno novo indicado e efetivado não pode ser bolsista, seja com bolsa de 50% ou 100%.",
               "O aluno novo indicado e efetivado não pode ser ex-aluno retornando à Rede Adventista no prazo de 2 anos.",
