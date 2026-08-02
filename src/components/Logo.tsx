@@ -19,7 +19,7 @@ export default function Logo({ compact = false }: { compact?: boolean }) {
         </span>
         {!compact && (
           <span className="block text-[11px] font-medium text-ink-muted">
-            Rede Adventista de Educação
+            Rede Adventista de Educação - ASuR
           </span>
         )}
       </span>
