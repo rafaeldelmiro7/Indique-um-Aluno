@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Field from "./Field";
 import { deleteReferral, updateReferral } from "../lib/firestore";
+import { formatPhone } from "../lib/phone";
 import {
   AMBASSADOR_TYPE_LABEL,
   CONTACT_RESULT_LABEL,
@@ -162,7 +163,7 @@ export default function ReferralEditModal({
               <Field label="Telefone/WhatsApp">
                 <input
                   value={form.studentPhone}
-                  onChange={(e) => update("studentPhone", e.target.value)}
+                  onChange={(e) => update("studentPhone", formatPhone(e.target.value))}
                   className="input"
                 />
               </Field>
@@ -217,7 +218,7 @@ export default function ReferralEditModal({
               <Field label="Telefone/WhatsApp">
                 <input
                   value={form.ambassadorPhone}
-                  onChange={(e) => update("ambassadorPhone", e.target.value)}
+                  onChange={(e) => update("ambassadorPhone", formatPhone(e.target.value))}
                   className="input"
                 />
               </Field>

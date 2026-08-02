@@ -19,6 +19,7 @@ import {
   UsersIcon,
 } from "../components/icons";
 import { formatCpf, isValidCpf } from "../lib/cpf";
+import { formatPhone } from "../lib/phone";
 import { listSchools } from "../lib/firestore";
 import { AUDIENCE_COPY, CAMPAIGN } from "../lib/campaign";
 import { AMBASSADOR_TYPE_LABEL, type School } from "../lib/types";
@@ -240,7 +241,7 @@ export default function Cadastro() {
                       inputMode="tel"
                       placeholder="(69) 90000-0000"
                       value={ambassadorPhone}
-                      onChange={(e) => setAmbassadorPhone(e.target.value)}
+                      onChange={(e) => setAmbassadorPhone(formatPhone(e.target.value))}
                       className="input"
                     />
                   </Field>
@@ -354,7 +355,7 @@ export default function Cadastro() {
                       inputMode="tel"
                       placeholder="(69) 90000-0000"
                       value={studentPhone}
-                      onChange={(e) => setStudentPhone(e.target.value)}
+                      onChange={(e) => setStudentPhone(formatPhone(e.target.value))}
                       className="input"
                     />
                   </Field>
