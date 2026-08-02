@@ -1,18 +1,21 @@
 import type { ReactNode } from "react";
-import fundoCampanha from "../assets/fundo-campanha-amarelo.png";
+import fundoBicolor from "../assets/Imagem Bicolor.png";
 
 /**
- * Fundo padrão das páginas públicas: a mesma textura amarela da campanha
- * usada na seção do prêmio, aqui sob uma camada branca de alta opacidade
- * para ficar apenas como um véu discreto, mais o gradiente suave no topo e
- * dois halos. Puramente decorativo.
+ * Fundo padrão das páginas públicas: o degradê bicolor da campanha (azul no
+ * topo, região clara no centro e amarelo na base), sob uma camada branca
+ * translúcida que o mantém apenas como ambientação, mais o gradiente suave
+ * no topo e dois halos. Puramente decorativo.
  */
 export default function PageBackground({ children }: { children: ReactNode }) {
   return (
     <div
-      className="relative min-h-screen overflow-hidden bg-surface bg-cover bg-center bg-no-repeat"
+      className="relative min-h-screen overflow-hidden bg-cover bg-top bg-no-repeat bg-scroll"
       style={{
-        backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.94)), url(${fundoCampanha})`,
+        // Cor de continuação alinhada ao amarelo suave da base da imagem,
+        // usada apenas enquanto o arquivo carrega.
+        backgroundColor: "#FDF6E7",
+        backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.82)), url(${fundoBicolor})`,
       }}
     >
       <div
