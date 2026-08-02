@@ -1,12 +1,20 @@
 import type { ReactNode } from "react";
+import fundoCampanha from "../assets/fundo-campanha-amarelo.png";
 
 /**
- * Fundo padrão das páginas públicas: gradiente suave no topo com dois halos
- * discretos, sobre a cor de superfície. Puramente decorativo.
+ * Fundo padrão das páginas públicas: a mesma textura amarela da campanha
+ * usada na seção do prêmio, aqui sob uma camada branca de alta opacidade
+ * para ficar apenas como um véu discreto, mais o gradiente suave no topo e
+ * dois halos. Puramente decorativo.
  */
 export default function PageBackground({ children }: { children: ReactNode }) {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-surface">
+    <div
+      className="relative min-h-screen overflow-hidden bg-surface bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.94)), url(${fundoCampanha})`,
+      }}
+    >
       <div
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[520px] bg-gradient-to-b from-brand-50 via-brand-50/40 to-transparent"
         aria-hidden="true"
